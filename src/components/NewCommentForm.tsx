@@ -69,8 +69,8 @@ export const NewCommentForm: React.FC<Props> = ({
 
       addComment(newComment)
         .then(response => {
-          if (response.error) {
-            throw new Error(`can't add`);
+          if (!response || !response.id) {
+            throw new Error(`Failed to add comment`);
           }
 
           setBody('');

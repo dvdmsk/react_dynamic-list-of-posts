@@ -37,8 +37,9 @@ export const App = () => {
 
   useEffect(() => {
     if (selectedUser) {
-      setSelectedPost(null);
       setIsLoad(true);
+      setSelectedPost(null);
+      setPosts([]);
       getPostsByUserId(selectedUser)
         .then(response => {
           if (!Array.isArray(response)) {
@@ -55,6 +56,11 @@ export const App = () => {
     }
   }, [selectedUser]);
 
+  const handleSelect = (userId: number | null) => {
+    setIsLoad(true);
+    setSelectedUser(userId);
+  };
+
   return (
     <main className="section">
       <div className="container">
@@ -62,7 +68,7 @@ export const App = () => {
           <div className="tile is-parent">
             <div className="tile is-child box is-success">
               <div className="block">
-                <UserSelector users={users} onSelect={setSelectedUser} />
+                <UserSelector users={users} onSelect={handleSelect} />
               </div>
 
               <div className="block" data-cy="MainContent">
@@ -81,7 +87,7 @@ export const App = () => {
                   </div>
                 )}
 
-                {!errors && !isLoad && (
+                {!errors && selectedUser && !isLoad && (
                   <PostsList
                     posts={posts}
                     selected={selectedPost}
